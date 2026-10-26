@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Human Exposure to Chemicals under Intermittent Emission and Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --base:#EEF2F6;
+  --blob-1:rgba(56,189,172,.42);
+  --blob-2:rgba(99,132,232,.38);
+  --blob-3:rgba(226,142,120,.30);
+  --glass:rgba(255,255,255,.52);
+  --glass-2:rgba(255,255,255,.34);
+  --glass-sunk:rgba(255,255,255,.26);
+  --edge:rgba(255,255,255,.78);
+  --edge-2:rgba(16,38,50,.10);
+  --shadow:0 10px 36px -14px rgba(14,37,51,.34);
+  --ink:#0E2733;
+  --ink-2:#44606F;
+  --ink-3:#6F8894;
+  --teal:#0B6B59;
+  --amber:#8A5500;
+  --rust:#A3351C;
+  --slate:#2A5A94;
+  --field:rgba(255,255,255,.62);
+  --focus:#1E6E9C;
+  --on-accent:#FFFFFF;
+  --font:"Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --base:#070F15;
+    --blob-1:rgba(20,150,135,.40);
+    --blob-2:rgba(64,96,196,.38);
+    --blob-3:rgba(170,78,60,.30);
+    --glass:rgba(146,178,198,.11);
+    --glass-2:rgba(146,178,198,.07);
+    --glass-sunk:rgba(5,14,20,.30);
+    --edge:rgba(188,215,230,.20);
+    --edge-2:rgba(0,0,0,.34);
+    --shadow:0 12px 40px -16px rgba(0,0,0,.72);
+    --ink:#EAF2F7;
+    --ink-2:#A9C1CE;
+    --ink-3:#7E97A5;
+    --teal:#4ED6AE;
+    --amber:#F0B65C;
+    --rust:#F0957A;
+    --slate:#8EC2EE;
+    --field:rgba(9,20,28,.42);
+    --focus:#8EC2EE;
+    --on-accent:#04231C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --base:#070F15;
+  --blob-1:rgba(20,150,135,.40); --blob-2:rgba(64,96,196,.38); --blob-3:rgba(170,78,60,.30);
+  --glass:rgba(146,178,198,.11); --glass-2:rgba(146,178,198,.07); --glass-sunk:rgba(5,14,20,.30);
+  --edge:rgba(188,215,230,.20); --edge-2:rgba(0,0,0,.34);
+  --shadow:0 12px 40px -16px rgba(0,0,0,.72);
+  --ink:#EAF2F7; --ink-2:#A9C1CE; --ink-3:#7E97A5;
+  --teal:#4ED6AE; --amber:#F0B65C; --rust:#F0957A; --slate:#8EC2EE;
+  --field:rgba(9,20,28,.42); --focus:#8EC2EE; --on-accent:#04231C;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{
+  margin:0;min-height:100%;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--base);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:16px;line-height:1.55;
+  font-feature-settings:"ss01";
+  -webkit-text-size-adjust:100%;
+  overflow-x:hidden;
+}
+.field-bg{position:fixed;inset:-25vmax;z-index:-1;pointer-events:none;filter:blur(70px)}
+.field-bg span{position:absolute;display:block;border-radius:50%}
+.b1{width:62vmax;height:62vmax;left:-6vmax;top:-4vmax;background:radial-gradient(circle at 50% 50%, var(--blob-1), transparent 66%)}
+.b2{width:70vmax;height:70vmax;right:-14vmax;top:4vmax;background:radial-gradient(circle at 50% 50%, var(--blob-2), transparent 66%)}
+.b3{width:56vmax;height:56vmax;left:18vmax;bottom:-16vmax;background:radial-gradient(circle at 50% 50%, var(--blob-3), transparent 66%)}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px 80px}
+.num{font-variant-numeric:tabular-nums}
+
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(26px) saturate(170%);
+  backdrop-filter:blur(26px) saturate(170%);
+  border:1px solid var(--edge);
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.26);
+  border-radius:20px;
+}
+header.masthead{padding:40px 0 22px}
+.mast-row{display:flex;gap:26px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+h1{font-weight:700;font-size:clamp(28px,3.8vw,44px);line-height:1.08;margin:0 0 12px;letter-spacing:-0.03em}
+.sub{color:var(--ink-2);max-width:58ch;margin:0;font-size:17px;font-weight:300}
+.cite{color:var(--ink-3);font-size:13.5px;margin:14px 0 0;max-width:62ch;font-weight:300}
+.toggle{
+  border:1px solid var(--edge);background:var(--glass-2);color:var(--ink-2);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border-radius:999px;padding:8px 18px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap;
+}
+.toggle:hover{color:var(--ink);border-color:var(--ink-3)}
+
+section{margin-bottom:22px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 12px;padding-left:4px;flex-wrap:wrap}
+h2{font-weight:600;font-size:17px;margin:0;letter-spacing:-0.01em}
+.sec-note{color:var(--ink-3);font-size:14px;margin:0;font-weight:300}
+.panel{padding:22px 24px}
+
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(218px,1fr));gap:18px 22px}
+label.fl{display:block;font-size:13.5px;color:var(--ink-2);margin:0 0 6px;font-weight:400}
+label.fl b{font-weight:600;color:var(--ink)}
+.ctl{display:flex;gap:7px}
+input,select,button{font:inherit;color:var(--ink)}
+input[type=number],select{
+  background:var(--field);border:1px solid var(--edge);border-radius:12px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  height:42px;padding:0 11px;min-width:0;transition:border-color .15s,background .15s;
+}
+input[type=number]{flex:1 1 auto;width:100%;font-variant-numeric:tabular-nums;font-weight:500}
+select{flex:0 0 auto;max-width:100px;cursor:pointer}
+select.kind{max-width:76px;color:var(--ink-2)}
+input:hover,select:hover{border-color:var(--ink-3)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.hint{font-size:12.5px;color:var(--ink-3);margin:6px 0 0;font-weight:300}
+.err{color:var(--rust);font-size:14px;margin:12px 0 0;font-weight:500}
+.err:empty{display:none}
+
+.presets{display:flex;flex-direction:column;align-items:stretch;gap:9px;margin:20px 0 0;padding-top:18px;border-top:1px solid var(--edge)}
+.presets span{font-size:13.5px;color:var(--ink-3);margin:0 0 1px;font-weight:300}
+.chip{
+  display:block;width:100%;text-align:left;
+  border:1px solid var(--edge);background:var(--glass-2);border-radius:14px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  padding:10px 16px;font-size:13.5px;line-height:1.4;cursor:pointer;color:var(--ink-2);
+}
+.chip:hover{color:var(--teal);border-color:var(--teal)}
+
+.split{display:grid;grid-template-columns:minmax(0,262px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:880px){.split{grid-template-columns:1fr}}
+
+.mx{display:grid;grid-template-columns:30px minmax(0,1fr) minmax(0,1fr);gap:12px}
+.mx-col{font-size:13.5px;color:var(--ink-2);text-align:center;font-weight:500;padding-bottom:2px}
+.mx-row{font-size:13.5px;color:var(--ink-2);writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;align-self:center;text-align:center;font-weight:500}
+@media (max-width:640px){.mx{grid-template-columns:1fr}.mx-col,.mx-row{display:none}}
+.cell{
+  background:var(--glass-2);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid var(--edge);border-radius:18px;
+  box-shadow:0 6px 24px -16px rgba(14,37,51,.5), inset 0 1px 0 rgba(255,255,255,.2);
+  padding:16px 18px;text-align:left;cursor:pointer;width:100%;font:inherit;color:inherit;display:block;
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.cell:hover{transform:translateY(-2px);box-shadow:0 14px 34px -18px rgba(14,37,51,.6)}
+.cell[aria-pressed=true]{
+  border-color:var(--teal);background:var(--glass);
+  box-shadow:0 0 0 1px var(--teal) inset, 0 14px 38px -18px rgba(11,107,89,.6);
+}
+.cell h3{font-size:16px;font-weight:600;margin:0 0 3px;letter-spacing:-0.01em}
+.cell .eq{font-size:12.5px;color:var(--ink-2);margin:0 0 12px;font-variant-numeric:tabular-nums;font-weight:300}
+.cell .mob{display:none;font-size:12.5px;color:var(--ink-3);margin:0 0 8px;font-weight:300}
+@media (max-width:640px){.cell .mob{display:block}}
+.ln{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:4px 0;border-top:1px solid var(--edge-2)}
+.ln:first-of-type{border-top:0}
+.ln dt{color:var(--ink-2);font-size:13px;white-space:nowrap;font-weight:300}
+.ln dd{margin:0;font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.grp{font-size:11.5px;color:var(--ink-3);letter-spacing:.04em;margin:11px 0 3px;font-weight:600}
+.grp:first-child{margin-top:0}
+dl{margin:0}
+.tpk{font-size:12.5px;color:var(--ink-3);margin:9px 0 0;font-variant-numeric:tabular-nums;font-weight:300}
+
+.out-field{margin-bottom:18px}
+.readout{
+  background:var(--glass-sunk);border:1px solid var(--edge-2);border-radius:14px;padding:11px 14px;
+}
+.readout .k{font-size:12.5px;color:var(--ink-2);margin:0 0 2px;font-weight:300}
+.readout .n{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin:0;line-height:1.2;letter-spacing:-0.02em}
+
+figure{margin:0}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-bottom:10px;font-weight:300}
+.legend i{display:inline-block;width:18px;height:0;border-top-width:2.5px;border-top-style:solid;vertical-align:middle;margin-right:7px}
+svg.plot{width:100%;height:auto;display:block;overflow:visible}
+.ax-l{font-size:11px;fill:var(--ink-3);font-family:var(--font);font-weight:400}
+.gl{stroke:var(--edge-2);stroke-width:1}
+.shade{fill:var(--slate);opacity:.12}
+
+.flags{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:14px;margin-bottom:20px}
+.note{
+  border-left:3px solid var(--ink-3);padding:12px 16px;margin:0 0 12px;border-radius:0 14px 14px 0;
+  background:var(--glass-sunk);
+}
+.note p{margin:0;max-width:74ch;font-weight:300}
+.note b{font-weight:700}
+.note.ok{border-left-color:var(--teal)} .note.ok b{color:var(--teal)}
+.note.warn{border-left-color:var(--amber)} .note.warn b{color:var(--amber)}
+.note.alert{border-left-color:var(--rust)} .note.alert b{color:var(--rust)}
+.note.info{border-left-color:var(--slate)} .note.info b{color:var(--slate)}
+
+.acts{display:flex;gap:11px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--edge)}
+.btn{
+  border:1px solid var(--edge);background:var(--glass-2);border-radius:999px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  padding:10px 20px;font-size:14px;cursor:pointer;color:var(--ink);font-weight:500;
+}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--teal);border-color:transparent;color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.live{font-size:13.5px;color:var(--teal);align-self:center;font-weight:500}
+
+details{padding:4px 24px;margin-bottom:14px}
+details summary{cursor:pointer;font-size:16px;font-weight:600;list-style:none;padding:16px 0;letter-spacing:-0.01em}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+";display:inline-block;width:1.2em;color:var(--ink-3);font-weight:400}
+details[open] summary::before{content:"\2212"}
+details[open] summary{border-bottom:1px solid var(--edge)}
+details .body{padding:14px 0 18px 1.2em;max-width:78ch;color:var(--ink-2);font-size:15px;font-weight:300}
+details .body p{margin:0 0 12px}
+table.sym{border-collapse:collapse;width:100%;font-size:14.5px;margin:4px 0 12px}
+table.sym th,table.sym td{text-align:left;padding:7px 12px 7px 0;border-bottom:1px solid var(--edge-2);vertical-align:top}
+table.sym th{font-weight:600;width:88px;color:var(--ink)}
+footer{margin-top:28px;padding:0 4px;color:var(--ink-3);font-size:13.5px;max-width:80ch;font-weight:300}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+@media print{.acts,.toggle,.presets,.field-bg{display:none}body{background:#fff}.glass,.cell{box-shadow:none;background:#fff}}
+</style>
+</head>
+<body>
+<div class="field-bg" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="mast-row">
+    <div>
+      <h1>Human Exposure to Chemicals under Intermittent Emission and Contact</h1>
+      <p class="sub">This tool converts steady-state estimates of chemical intake rates and biological concentrations into the time-averaged and peak values expected under intermittent chemical emission and/or human contact, without running a dynamic model.</p>
+      <p class="cite">Li et al. (2027) Modeling human exposure to chemicals from intermittent applications of consumer products using a steady-state modeling framework. <i>J. Expo. Sci. Environ. Epidemiol.</i></p>
+    </div>
+    <button class="toggle" id="theme" type="button">Dark</button>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><h2>Intermittency information</h2><p class="sec-note">Enter information about the intermittency of product application or chemical emission, the rate at which the chemical dissipates from the exposure-relevant medium, and the rate at which it is eliminated from the human body (<i>required only for calculating biological concentrations</i>).</p></div>
+  <div class="glass panel">
+    <div class="field-grid">
+      <div>
+        <label class="fl" for="tE"><b><i>t</i><sub>E</sub></b>: Application/emission period</label>
+        <div class="ctl"><input id="tE" type="number" value="5" step="any" min="0"><select id="tEu" aria-label="Unit for tE"><option>min</option><option>h</option><option>d</option></select></div>
+        <p class="hint">Duration of each application/emission episode (For continuous emission, enter the duration of the contact period instead).</p>
+      </div>
+      <div>
+        <label class="fl" for="tN"><b><i>t</i><sub>N</sub></b>: Post-application/emission period</label>
+        <div class="ctl"><input id="tN" type="number" value="715" step="any" min="0"><select id="tNu" aria-label="Unit for tN"><option>min</option><option>h</option><option>d</option></select></div>
+        <p class="hint">Gap until the next application/emission episode (For continuous emission, enter the duration of the non-contact period instead).</p>
+      </div>
+      <div>
+        <label class="fl" for="kv">Dissipation from the exposure-relevant medium</label>
+        <div class="ctl">
+          <select id="kt" class="kind" aria-label="Enter as rate or residence time"><option value="k">kE</option><option value="r">RE</option></select>
+          <input id="kv" type="number" value="0.30" step="any" min="0">
+          <select id="ku" aria-label="Unit"><option>1/h</option><option>1/d</option><option>1/min</option></select>
+        </div>
+        <p class="hint" id="k-hint">The dissipation rate constant (k), typically obtained from your steady-state model.</p>
+      </div>
+      <div>
+        <label class="fl" for="bv">Elimination from the body</label>
+        <div class="ctl">
+          <select id="bt" class="kind" aria-label="Enter as rate or half-life"><option value="k">kB</option><option value="h">t½</option></select>
+          <input id="bv" type="number" value="0.1005" step="any" min="0">
+          <select id="bu" aria-label="Unit"><option>1/h</option><option>1/d</option><option>1/min</option></select>
+        </div>
+        <p class="hint" id="b-hint">The total elimination rate constant (k), typically obtained from toxicokinetic modeling or measurement.</p>
+      </div>
+    </div>
+    <p class="err" id="err-in" role="alert"></p>
+    <div class="presets">
+      <span>Parameterized examples you may try:</span>
+      <button class="chip" type="button" data-p="cleanser">Methylparaben in a wash-off facial cleanser, used twice a day</button>
+      <button class="chip" type="button" data-p="sunscreen">Methylparaben in sunscreen, applied twice a day</button>
+      <button class="chip" type="button" data-p="nicotine">Nicotine inhaled by a bystander from secondhand smoke, one cigarette an hour</button>
+      <button class="chip" type="button" data-p="meth">Methamphetamine inhaled by a bystander from secondhand andthirdhand smoke, three consumptions a day</button>
+    </div>
+  </div>
+</section>
+
+<section class="split">
+  <div>
+    <div class="sec-head"><h2>Your steady-state model estimates</h2></div>
+    <div class="glass panel">
+      <p class="hint">Enter either or both:</p>
+      <div class="out-field">
+        <label class="fl" for="I"><b>I<sub>SS</sub></b>: Intake rate</label>
+        <div class="ctl"><input id="I" type="number" value="50" step="any" min="0"><select id="Iu" aria-label="Intake unit"><option>µg/d</option><option>mg/d</option><option>µg/kg/d</option><option>ng/d</option><option>nmol/d</option></select></div>
+      </div>
+      <div class="out-field">
+        <label class="fl" for="C"><b>C<sub>B,SS</sub></b>: Biological concentration</label>
+        <div class="ctl"><input id="C" type="number" value="2" step="any" min="0"><select id="Cu" aria-label="Concentration unit"><option>ng/mL</option><option>µg/L</option><option>ng/g</option><option>nmol/L</option></select></div>
+      </div>
+      <p class="err" id="err-out" role="alert"></p>
+      <p class="hint">Run your steady-state model using the <strong>pulse</strong> emission rate, <i>S</i>, during an application episode to estimate either or both: (1) <strong>Intake rate</strong> (<b>I<sub>SS</sub></b>): The rate at which a chemical enters the human body through exposure routes such as inhalation or dermal absorption, and/or (2) <strong>Biological concentration</strong> (<b>C<sub>B,SS</sub></b>): The concentration of a chemical in a biological medium, such as whole blood, serum, or plasma. If you need only one, leave the other field blank.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-head"><h2>Time-averaged and peak estimates under intermittent emission and/or contact</h2><p class="sec-note">Select the panel matching your scenario</p></div>
+    <div class="mx" role="group" aria-label="Emission and contact scenarios">
+      <div></div>
+      <div class="mx-col">Continuous contact</div>
+      <div class="mx-col">Intermittent contact</div>
+
+      <div class="mx-row">Continuous emission (Constant contamination)</div>
+      <button class="cell" type="button" data-k="cc" aria-pressed="false">
+        <p class="mob">Continuous emission · continuous contact</p>
+        <h3>Panel 1: Conventional steady state</h3>
+        <p class="eq">No correction is needed</p>
+        <dl id="d-cc"></dl>
+      </button>
+      <button class="cell" type="button" data-k="ci" aria-pressed="false">
+        <p class="mob">Continuous emission · intermittent contact</p>
+        <h3>Panel 2: Constant contamination, windowed contact</h3>
+        <p class="eq" id="eq-ci"></p>
+        <dl id="d-ci"></dl>
+      </button>
+
+      <div class="mx-row">Intermittent emission</div>
+      <button class="cell" type="button" data-k="ic" aria-pressed="false">
+        <p class="mob">Intermittent emission · continuous contact</p>
+        <h3>Panel 3: Windowed contamination, constant contact</h3>
+        <p class="eq" id="eq-ic"></p>
+        <dl id="d-ic"></dl>
+      </button>
+      <button class="cell" type="button" data-k="ii" aria-pressed="true">
+        <p class="mob">Intermittent emission · intermittent contact</p>
+        <h3>Panel 4: Windowed contamination and contact</h3>
+        <p class="eq" id="eq-ii"></p>
+        <dl id="d-ii"></dl>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Time-dependent illustration</h2><p class="sec-note" id="plot-sub"></p></div>
+  <div class="glass panel">
+    <figure>
+      <div class="legend">
+        <span><i style="border-top-color:var(--slate)"></i>Intake rate <span class="num">I(t)/I<sub>SS</sub></span></span>
+        <span><i style="border-top-color:var(--rust)"></i>Concentration <span class="num">C<sub>B</sub>(t)/C<sub>B,SS</sub></span></span>
+        <span><i style="border-top-color:var(--ink-3);border-top-style:dashed"></i>Time average</span>
+      </div>
+      <svg class="plot" id="plot" viewBox="0 0 760 260" role="img" aria-labelledby="plot-t plot-d">
+        <title id="plot-t">Intake rate and biological concentration over two exposure cycles</title>
+        <desc id="plot-d">Curves are normalised to their steady-state values; the shaded band marks the contact window.</desc>
+      </svg>
+      <figcaption class="hint" id="plot-cap"></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Does intermittency matter here?</h2></div>
+  <div class="glass panel">
+    <div class="flags">
+      <div>
+        <label class="fl" for="P0"><b>PBR<sub>0</sub></b>: maximum acceptable peak-to-baseline ratio of the intake rate</label>
+        <input id="P0" type="number" value="2" step="any" min="1" style="width:100%">
+      </div>
+      <div class="readout"><p class="k">Calculated PBR = e<sup>kE·tN</sup></p><p class="n" id="r-pbr"></p></div>
+      <div class="readout"><p class="k">R<sub>E</sub> = threshold for ignoring intermittent emission</p><p class="n" id="r-rth"></p></div>
+      <div class="readout" id="box-rat"><p class="k">Intermittent emission: Scaling<sub>intermittent contact</sub> ÷ Scaling<sub>continuous contact</sub></p><p class="n" id="r-rat"></p></div>
+      <div class="readout" id="box-ipbr"><p class="k">Constant contamination: Biological concentration variation = e<sup>kB·tN</sup></p><p class="n" id="r-ipbr"></p></div>
+    </div>
+    <p class="err" id="err-pbr" role="alert"></p>
+    <div id="interp" aria-live="polite"></div>
+    <div class="acts">
+      <button class="btn primary" type="button" id="copy">Copy methods summary</button>
+      <button class="btn" type="button" id="share">Copy link to this scenario</button>
+      <button class="btn" type="button" id="csv">Download results as CSV</button>
+      <span class="live" id="live" role="status"></span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <details class="glass">
+    <summary>Symbols and notes</summary>
+    <div class="body">
+      <table class="sym">
+        <tr><th>S</th><td><strong>Pulse</strong> emission rate during the application/emission period (mass/time). For example, if a cigarette containing 5 µg of nicotine is smoked over 10 minutes, the pulse emission rate is 0.5 µg/min. Calculate this rate using only the duration of active application or emission, excluding any intervals between episodes.</td></tr>
+        <tr><th>t<sub>E</sub></th><td>Application/emission period (time).</td></tr>
+        <tr><th>t<sub>N</sub></th><td>Post-application/emission period, when release is negligible (time)</td></tr>
+        <tr><th>k<sub>E</sub> and R<sub>E</sub></th><td>Rate constant (k<sub>E</sub>) describing dissipation from the exposure-relevant compartment (1/time) and its corresponding residence time (R<sub>E</sub> in time). k<sub>E</sub> = 1 ÷ R<sub>E</sub>. Note that these parameters describe the overall dissipation rate from the exposure-relevant compartment (e.g., skin for dermal absorption or breathing-zone air for inhalation). Overall dissipation includes all processes that remove the chemical from that compartment, not just chemical reaction.</td></tr>
+        <tr><th>k<sub>B</sub> and t½</th><td>Rate constant (k<sub>B</sub> in 1/time) and half-life (t½ in time) of the total (terminal) elimination from the human body. k<sub>B</sub> = ln2 ÷ t½. Note that these parameters describe the total elimination rate from the human body. Total elimination includes all processes that remove the chemical from the human body (e.g., biotransformation, renal clearance, exhalation, fecal egestion, etc.), not just biotransformation.</td></tr>
+        <tr><th>PBR</th><td>Peak-to-baseline ratio of the intake rate</td></tr>
+        <tr><th>PBR<sub>0</sub></th><td>Your selected acceptable peak-to-baseline ratio used as a decision threshold</td></tr>
+        <tr><th>F</th><td>Scaling factor applied to I<sub>SS</sub> and C<sub>B,SS</sub> to get time averages</td></tr>
+        <tr><th>δ</th><td>Unitless timing term used to calculate scaling factors in the intermittent contact scenario. For details, see Eq. 8b</td></tr>
+      </table>
+      <p>Enter t<sub>E</sub>, t<sub>N</sub>, k<sub>E</sub> and k<sub>B</sub> in any units, and this tool converts internally.</p>
+    </div>
+  </details>
+</section>
+
+<footer>
+  <p>© 2027. Li Li (University of Nevada, Reno). The underlying method is described in the Li et al. publication. Please cite that paper when you use results from this calculator.</p>
+  <p>This tool is provided for research and educational use, as is and without warranty of any kind. It implements a screening-level approximation that rests on stated assumptions about first-order dissipation, periodic use and linear toxicokinetics. Results are not a substitute for a full dynamic exposure assessment, professional judgement, or regulatory guidance, and the authors accept no liability for decisions made on the basis of its output.</p>
+  <p>Questions, bug reports, and suggestions: lili@unr.edu</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+const $ = function(id){ return document.getElementById(id); };
+const TO_H = {min:1/60, h:1, d:24};
+const SUP = {"-":"\u207B","0":"\u2070","1":"\u00B9","2":"\u00B2","3":"\u00B3","4":"\u2074","5":"\u2075","6":"\u2076","7":"\u2077","8":"\u2078","9":"\u2079"};
+let sel = "ii";
+let last = null;
+
+const CELL = {
+  cc:{name:"continuous emission (constant contamination), continuous contact", plain:"the conventional steady-state case"},
+  ci:{name:"continuous emission (constant contamination), intermittent contact", plain:"a steady source with a limited contact window"},
+  ic:{name:"intermittent emission, continuous contact", plain:"a leave-on product"},
+  ii:{name:"intermittent emission, intermittent contact", plain:"a wash-off product"}
+};
+
+const PRESETS = {
+  cleanser:{tE:5,    tEu:"min", tN:715,   tNu:"min", kv:0.30,    ku:"1/h",   bv:0.1005,  bu:"1/h",   cell:"ii"},
+  sunscreen:{tE:1.25,tEu:"h",   tN:10.75, tNu:"h",   kv:0.30,    ku:"1/h",   bv:0.1005,  bu:"1/h",   cell:"ic"},
+  nicotine:{tE:10,   tEu:"min", tN:50,    tNu:"min", kv:0.01036, ku:"1/min", bv:0.00462, bu:"1/min", cell:"ii"},
+  meth:{tE:10,       tEu:"min", tN:470,   tNu:"min", kv:0.506,   ku:"1/h",   bv:0.063,   bu:"1/h",   cell:"ic"}
+};
+
+function fmt(x, sig){
+  if(!isFinite(x)) return "\u2014";
+  if(x === 0) return "0";
+  const a = Math.abs(x);
+  if(a < 1e-3 || a >= 1e5){
+    const parts = x.toExponential(2).split("e");
+    const ex = String(parseInt(parts[1],10)).split("").map(function(c){return SUP[c]||c;}).join("");
+    return parts[0] + "\u00D710" + ex;
+  }
+  return String(Number(x.toPrecision(sig||3)));
+}
+function fmtT(h, sig){
+  if(!isFinite(h)) return "\u2014";
+  /* choose the unit from the rounded value, so 0.9999 h reads as 1 h and not 60 min */
+  const r = function(v){ return Number(v.toPrecision(sig||3)); };
+  if(r(h*3600) < 60) return fmt(h*3600, sig) + " s";
+  if(r(h*60) < 60) return fmt(h*60, sig) + " min";
+  if(r(h) < 48) return fmt(h, sig) + " h";
+  return fmt(h/24, sig) + " d";
+}
+function toRate(v, unit, asRate, isHalfLife){
+  if(asRate) return unit === "1/h" ? v : (unit === "1/d" ? v/24 : v*60);
+  const hours = v * TO_H[unit];
+  return isHalfLife ? Math.LN2/hours : 1/hours;
+}
+
+function cycle(tE, tN, kE, kB, iE, iC){
+  if(Math.abs(kB - kE) < 1e-7*Math.max(kB,kE)) kB = kE*(1 + 1e-6);
+  const T = tE + tN, a = kE*tE, b = kE*tN, r = kB/(kB - kE);
+  const m0 = iE ? (-Math.expm1(-a))*Math.exp(-b)/(-Math.expm1(-a-b)) : 1;
+  const mE = iE ? m0*Math.exp(b) : 1;
+  const mass = function(t){
+    if(!iE) return 1;
+    return t <= tE ? 1 + (m0-1)*Math.exp(-kE*t) : mE*Math.exp(-kE*(t-tE));
+  };
+  const intake = function(t){ return (t > tE && iC) ? 0 : mass(t); };
+  const seg1 = iE ? {A:1, B:m0-1} : {A:1, B:0};
+  const seg2 = iC ? {A:0, B:0} : (iE ? {A:0, B:mE} : {A:1, B:0});
+  const step = function(s, c0, dur){
+    const K = s.B*r;
+    return s.A + K*Math.exp(-kE*dur) + (c0 - s.A - K)*Math.exp(-kB*dur);
+  };
+  const beta = step(seg2, step(seg1, 0, tE), tN);
+  const c0 = beta/(-Math.expm1(-kB*T));
+  const cE = step(seg1, c0, tE);
+  const conc = function(t){ return t <= tE ? step(seg1, c0, t) : step(seg2, cE, t - tE); };
+  let cPeak, tPeak;
+  if(iC || !iE){ cPeak = cE; tPeak = tE; }
+  else {
+    const N = 2000; let best = -Infinity, bi = 0; const ts = [];
+    for(let i=0;i<=N;i++){
+      const t = i <= N/2 ? tE*i/(N/2) : tE + tN*(i-N/2)/(N/2);
+      ts.push(t);
+      const v = conc(t);
+      if(v > best){ best = v; bi = i; }
+    }
+    let lo = ts[Math.max(0,bi-1)], hi = ts[Math.min(N,bi+1)];
+    for(let k=0;k<90;k++){
+      const m1 = lo + (hi-lo)/3, m2 = hi - (hi-lo)/3;
+      if(conc(m1) < conc(m2)) lo = m1; else hi = m2;
+    }
+    tPeak = (lo+hi)/2;
+    cPeak = Math.max(conc(tPeak), best);
+  }
+  return {
+    intake:intake, conc:conc, T:T,
+    iPeak: iE ? (-Math.expm1(-a))/(-Math.expm1(-a-b)) : 1,
+    cPeak: cPeak, tPeak: tPeak, cBase: c0
+  };
+}
+
+function compute(){
+  $("err-in").textContent = ""; $("err-out").textContent = ""; $("err-pbr").textContent = "";
+  const tE = parseFloat($("tE").value)*TO_H[$("tEu").value];
+  const tN = parseFloat($("tN").value)*TO_H[$("tNu").value];
+  const kraw = parseFloat($("kv").value), braw = parseFloat($("bv").value);
+  if(!(tE > 0) || !(tN > 0) || !(kraw > 0) || !(braw > 0)){
+    $("err-in").textContent = "Enter positive numbers for tE, tN, the compartment loss term and the body elimination term.";
+    return null;
+  }
+  const kE = toRate(kraw, $("ku").value, $("kt").value === "k", false);
+  const kB = toRate(braw, $("bu").value, $("bt").value === "k", true);
+  const Iraw = $("I").value.trim(), Craw = $("C").value.trim();
+  const I = Iraw === "" ? null : parseFloat(Iraw);
+  const C = Craw === "" ? null : parseFloat(Craw);
+  if((I !== null && !(I >= 0)) || (C !== null && !(C >= 0))){
+    $("err-out").textContent = "Model outputs must be zero or a positive number.";
+  }
+  const T = tE + tN, a = kE*tE, b = kE*tN;
+  const delta = Math.expm1(-b)*Math.expm1(-a)/Math.expm1(-a-b);
+  const F = { cc:1, ci:tE/T, ic:tE/T, ii:(tE + delta/kE)/T };
+  const cells = {
+    cc: cycle(tE,tN,kE,kB,false,false),
+    ci: cycle(tE,tN,kE,kB,false,true),
+    ic: cycle(tE,tN,kE,kB,true,false),
+    ii: cycle(tE,tN,kE,kB,true,true)
+  };
+  const P0 = parseFloat($("P0").value);
+  if(!(P0 > 1)) $("err-pbr").textContent = "PBR\u2080 must be greater than 1.";
+  return {
+    tE:tE, tN:tN, T:T, kE:kE, kB:kB, RE:1/kE, delta:delta, F:F, cells:cells,
+    I:I, C:C, Iu:$("Iu").value, Cu:$("Cu").value,
+    PBR: Math.exp(b), iPBR: Math.exp(kB*tN),
+    ratio: F.ii/F.ic, P0: P0 > 1 ? P0 : null,
+    Rthr: P0 > 1 ? tN/Math.log(P0) : NaN
+  };
+}
+
+function render(s){
+  if(!s) return;
+  last = s;
+  const sI = function(x){ return s.I === null ? "\u2014" : fmt(s.I*x) + " " + s.Iu; };
+  const sC = function(x){ return s.C === null ? "\u2014" : fmt(s.C*x) + " " + s.Cu; };
+
+  $("eq-ci").textContent = "Time-averaged scaling = t\u1D07/(t\u1D07+t\u0274) = " + fmt(s.F.ci) + " \u00B7 See Eq. 10a";
+  $("eq-ic").textContent = "Time-averaged scaling = t\u1D07/(t\u1D07+t\u0274) = " + fmt(s.F.ic) + " \u00B7 See Eq. 10a";
+  $("eq-ii").textContent = "Time-averaged scaling = (t\u1D07 + R\u1D07\u00B7\u03B4)/(t\u1D07+t\u0274) = " + fmt(s.F.ii) + " \u00B7 See Eq. 10b";
+
+  ["cc","ci","ic","ii"].forEach(function(k){
+    const c = s.cells[k], F = s.F[k];
+    let h = "<p class='grp'>Time average</p>";
+    h += "<div class='ln'><dt>Intake</dt><dd>" + sI(F) + "</dd></div>";
+    h += "<div class='ln'><dt>Concentration</dt><dd>" + sC(F) + "</dd></div>";
+    h += "<p class='grp'>" + (k === "cc" ? "Peak (no fluctuation)" : "Peak") + "</p>";
+    h += "<div class='ln'><dt>Intake</dt><dd>" + sI(c.iPeak) + "</dd></div>";
+    h += "<div class='ln'><dt>Concentration</dt><dd>" + sC(c.cPeak) + "</dd></div>";
+    $("d-"+k).innerHTML = h;
+    const btn = document.querySelector(".cell[data-k='"+k+"']");
+    btn.setAttribute("aria-pressed", k === sel ? "true" : "false");
+    const old = btn.querySelector(".tpk");
+    if(old) old.remove();
+    if(k !== "cc"){
+      const p = document.createElement("p");
+      p.className = "tpk";
+      p.textContent = "Concentration peaks " + fmtT(c.tPeak) + " after the cycle starts";
+      btn.appendChild(p);
+    }
+  });
+
+  $("r-pbr").textContent = fmt(s.PBR);
+  $("r-rth").textContent = isFinite(s.Rthr) ? "\u2265 " + fmtT(s.Rthr) : "\u2014";
+  $("r-rat").textContent = fmt(s.ratio);
+  $("r-ipbr").textContent = fmt(s.iPBR);
+  /* the contact-scaling ratio only means something for the intermittent-emission panels (3 and 4) */
+  $("box-rat").style.display = (sel === "ic" || sel === "ii") ? "" : "none";
+  /* the internal fluctuation only means something for Panel 2, and only once a biological concentration is entered */
+  $("box-ipbr").style.display = (sel === "ci" && s.C !== null) ? "" : "none";
+
+  plot(s);
+  interpret(s);
+  writeHash();
+}
+
+function plot(s){
+  const c = s.cells[sel], T = s.T;
+  const W = 760, H = 260, L = 48, R = 14, Tp = 18, B = 34;
+  const px = function(t){ return L + (W-L-R)*(t/(2*T)); };
+  const N = 440, pts = [];
+  for(let i=0;i<=N;i++){
+    const t = 2*T*i/N, tt = t % T;
+    pts.push({t:t, i:c.intake(tt), c:c.conc(tt)});
+  }
+  let ymax = 1;
+  pts.forEach(function(p){ ymax = Math.max(ymax, p.i, p.c); });
+  ymax = Math.max(ymax, s.F[sel]) * 1.12;
+  const py = function(v){ return H - B - (H-B-Tp)*(v/ymax); };
+  const path = function(key){
+    let d = "";
+    for(let i=0;i<pts.length;i++){
+      const p = pts[i], prev = pts[i-1];
+      const jump = prev && Math.abs(p[key]-prev[key]) > 0.35*ymax && ((prev.t % T) <= s.tE) !== ((p.t % T) <= s.tE);
+      d += (i === 0 ? "M" : (jump && key === "i" ? "M" : "L")) + px(p.t).toFixed(1) + " " + py(p[key]).toFixed(1) + " ";
+    }
+    return d;
+  };
+  let g = "";
+  for(let cyc=0; cyc<2; cyc++){
+    g += "<rect class='shade' x='" + px(cyc*T) + "' y='" + Tp + "' width='" + Math.max(1.2, px(s.tE)-px(0)) + "' height='" + (H-B-Tp) + "' rx='2'/>";
+  }
+  [0, 0.5, 1].forEach(function(f){
+    const v = f*ymax/1.12;
+    g += "<line class='gl' x1='" + L + "' y1='" + py(v) + "' x2='" + (W-R) + "' y2='" + py(v) + "'/>";
+    g += "<text class='ax-l' x='" + (L-8) + "' y='" + (py(v)+4) + "' text-anchor='end'>" + fmt(v,2) + "</text>";
+  });
+  g += "<line x1='" + L + "' y1='" + (H-B) + "' x2='" + (W-R) + "' y2='" + (H-B) + "' stroke='var(--ink-3)' stroke-width='1' opacity='.5'/>";
+  [0,1,2].forEach(function(n){
+    g += "<line x1='" + px(n*T) + "' y1='" + (H-B) + "' x2='" + px(n*T) + "' y2='" + (H-B+5) + "' stroke='var(--ink-3)' opacity='.5'/>";
+    g += "<text class='ax-l' x='" + px(n*T) + "' y='" + (H-B+19) + "' text-anchor='middle'>" + (n === 0 ? "0" : fmtT(n*T)) + "</text>";
+  });
+  g += "<text class='ax-l' x='" + (W-R) + "' y='" + (H-B+19) + "' text-anchor='end'>two exposure cycles</text>";
+  g += "<line x1='" + L + "' y1='" + py(s.F[sel]) + "' x2='" + (W-R) + "' y2='" + py(s.F[sel]) + "' stroke='var(--ink-3)' stroke-dasharray='5 4' stroke-width='1.5'/>";
+  g += "<path d='" + path("i") + "' fill='none' stroke='var(--slate)' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>";
+  g += "<path d='" + path("c") + "' fill='none' stroke='var(--rust)' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/>";
+  g += "<text class='ax-l' x='" + L + "' y='" + (Tp-5) + "'>relative to steady state</text>";
+  const svg = $("plot");
+  svg.innerHTML = "<title id='plot-t'>Intake rate and biological concentration over two exposure cycles</title><desc id='plot-d'>Curves normalised to their steady-state values. The shaded band marks the application or contact window.</desc>" + g;
+  $("plot-sub").textContent = CELL[sel].name;
+  $("plot-cap").textContent = "Shaded band: application/emission period t\u1D07 = " + fmtT(s.tE) + ". Dashed line: the time-averaged scaling factor, " + fmt(s.F[sel]) + " (the fraction of the time-averaged estimates in the steady-state estimates). Both intake rate and biological concentration are divided by their own steady-state value, so they share one axis.";
+}
+
+function interpret(s){
+  const B = function(t){ return "<b>" + t + "</b>"; };
+  const out = [];
+  if(sel === "ci" || sel === "cc"){
+    out.push({cls:"info", html: B("Contamination in the exposure-relevant medium is constant,") + " as we assume continuous emissions to the exposure-relevant medium. " + (sel === "cc" ? "Nothing fluctuates: peak, baseline and average all equal the steady-state values." : "The intake rate switches between I<sub>SS</sub> during the contact period (i.e., peak) and zero outside the contact period (i.e., baseline). The peak-to-baseline criterion of Eq. 14 does not apply.")});
+  } else if(s.P0){
+    /* R_E and R_thr can round to the same string just either side of the threshold;
+       in that case say the scenario sits on the threshold rather than print 'x is shorter than x' */
+    let sigT = 3;
+    while(sigT < 7 && fmtT(s.RE, sigT) === fmtT(s.Rthr, sigT)) sigT++;
+    const tight = fmtT(s.RE, sigT) === fmtT(s.Rthr, sigT);
+    const because = tight
+      ? " this case sits essentially on the threshold: the residence time in the exposure-relevant compartment, " + fmtT(s.RE) + ", is almost exactly the " + fmtT(s.Rthr) + " needed to meet your tolerance, so treat the verdict as marginal."
+      : " the residence time in the exposure-relevant compartment (R\u1D07=" + fmtT(s.RE, sigT) + ") is " + (s.PBR > s.P0 ? "shorter" : "longer") + " than the threshold " + fmtT(s.Rthr, sigT) + " that your tolerance requires.";
+    if(s.PBR > s.P0){
+      out.push({cls:"warn", html: B("Considering intermittent emission matters.") + " The calculated peak-to-baseline ratio (PBR) indicates that the intake rate varies " + fmt(s.PBR) + "-fold between application episodes, exceeding your maximum acceptable variation of " + fmt(s.P0) + "-fold. This occurs because" + because + " Steady-state modeling alone is therefore insufficient to capture fluctuations in chemical concentrations within the exposure-relevant compartment. For human health assessments, consider using the time-averaged and/or peak results calculated in Panel 3 or Panel 4 above, depending on whether contact is intermittent (see below)."});
+    } else {
+      out.push({cls:"ok", html: B("Ignoring intermittent emission is defensible.") + " The calculated peak-to-baseline ratio (PBR) indicates that the intake rate varies only " + fmt(s.PBR) + "-fold between application episodes, within your maximum acceptable variation of " + fmt(s.P0) + "-fold. This occurs because" + because + " In this case, using the results from Panel 1 or Panel 2 above, depending on whether contact is intermittent (see below), introduces an acceptable level of bias."});
+    }
+  }
+  if(sel === "ic" || sel === "ii"){
+    if(s.ratio >= 0.5){
+      out.push({cls:"ok", html: B("Ignoring intermittent contact is defensible.") + " In the case that product application or chemical emission is intermittent, ending contact when the emission ends lowers the time average by less than a factor of two (ratio " + fmt(s.ratio) + "), so approximating intermittent contact as continuous contact is acceptable."});
+    } else {
+      out.push({cls:"alert", html: B("Considering intermittent contact matters.") + " In the case that product application or chemical emission is intermittent, if contact stops when the emission ends, treating contact as continuous overstates time-averaged exposure about " + fmt(1/s.ratio) + "-fold (ratio " + fmt(s.ratio) + "), exceeding the commonly used 2-fold threshold. The difference is driven mostly by how short contact period (equal to t\u1D07) is relative to the residence time in the exposure-relevant compartment (R\u1D07)."});
+    }
+  }
+  if(sel === "ci"){
+    const big = s.iPBR > (s.P0 || 2);
+    out.push({cls: big ? "warn" : "ok", html: B("We additionally examine the fluctuation in biological concentration.") + " In the case of constant contamination in the exposure-relevant medium, the predicted biological concentration varies by e<sup>kB\u00B7tN</sup> = " + fmt(s.iPBR) + "-fold between contact periods. " + (big ? "This large variation occurs because the total (terminal) elimination half-life (t½) is short relative to the interval between contact periods (equal to t\u0274). Dynamic modeling is therefore needed to accurately characterize biological concentrations. This also indicates that a single spot biomonitoring sample may differ substantially from the time-averaged concentration, and it is important to record the sampling time." : "This modest variation occurs because the total (terminal) elimination half-life (t½) is long relative to the interval between contact periods (equal to t\u0274), allowing biological concentrations to remain close to their time average. Steady-state modeling is therefore sufficient to characterize biological concentrations.")});
+  }
+  const c = s.cells[sel], F = s.F[sel];
+  const ratioC = c.cPeak/F;
+  const sI = function(x){ return s.I === null ? "\u2014" : fmt(s.I*x) + " " + s.Iu; };
+  const sC = function(x){ return s.C === null ? "\u2014" : fmt(s.C*x) + " " + s.Cu; };
+  let tail = B("Your selected panel") + " is " + CELL[sel].name + " (imagine " + CELL[sel].plain + "). Multiply the steady-state output by the scaling factor = " + fmt(F) + " to get the time average: intake " + sI(F) + ", concentration " + sC(F) + ". The peak values are " + sI(c.iPeak) + " and " + sC(c.cPeak) + ".";
+  if(sel !== "cc"){
+    tail += " Peak concentration is " + fmt(ratioC) + "\u00D7 the average, " + (ratioC < 2 ? "so internal levels stay fairly smooth across the cycle." : "so a time average alone understates the short-term internal dose.");
+  }
+  out.push({cls:"info", html: tail});
+  $("interp").innerHTML = out.map(function(n){ return "<div class='note " + n.cls + "'><p>" + n.html + "</p></div>"; }).join("");
+}
+
+function writeHash(){
+  const p = [ $("tE").value, $("tEu").value, $("tN").value, $("tNu").value,
+    $("kt").value, $("kv").value, $("ku").value, $("bt").value, $("bv").value, $("bu").value,
+    $("I").value, $("Iu").value, $("C").value, $("Cu").value, $("P0").value, sel ];
+  history.replaceState(null, "", "#" + p.map(encodeURIComponent).join("~"));
+}
+function readHash(){
+  const raw = location.hash.replace(/^#/, "");
+  if(!raw) return;
+  const p = raw.split("~").map(decodeURIComponent);
+  if(p.length < 16) return;
+  $("kt").value = p[4]; syncUnits("kt","ku");
+  $("bt").value = p[7]; syncUnits("bt","bu");
+  ["tE","tEu","tN","tNu","kt","kv","ku","bt","bv","bu","I","Iu","C","Cu","P0"].forEach(function(id,i){
+    const el = $(id); if(el) el.value = p[i];
+  });
+  if(CELL[p[15]]) sel = p[15];
+}
+function flash(msg){
+  $("live").textContent = msg;
+  setTimeout(function(){ $("live").textContent = ""; }, 2600);
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){ flash("Copy failed \u2014 select the text manually."); }
+  document.body.removeChild(ta);
+}
+function copyText(text, msg){
+  const done = function(){ flash(msg); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text, done); });
+  } else fallbackCopy(text, done);
+}
+function methodsText(){
+  const s = last; if(!s) return "";
+  const c = s.cells[sel], F = s.F[sel];
+  const unitI = s.I === null ? "" : " (" + fmt(s.I*F) + " " + s.Iu + ")";
+  const unitC = s.C === null ? "" : " (" + fmt(s.C*F) + " " + s.Cu + ")";
+  let t = "Intermittent exposure correction\n\n";
+  t += "Scenario: " + CELL[sel].name + ".\n";
+  t += "Timing: tE = " + fmtT(s.tE) + ", tN = " + fmtT(s.tN) + " (exposure duration " + fmtT(s.T) + ").\n";
+  t += "Kinetics: kE = " + fmt(s.kE) + " 1/h (RE = " + fmtT(s.RE) + "); kB = " + fmt(s.kB) + " 1/h (half-life " + fmtT(Math.LN2/s.kB) + ").\n\n";
+  t += "Time-averaged estimates were obtained by seeding a steady-state model with the pulse emission rate S and scaling its outputs by F = " + fmt(F) + ", equivalent to an equivalent constant emission rate Seq = " + fmt(F) + " x S";
+  if(sel === "ii") t += ", following Eq. 10b with delta = " + fmt(s.delta);
+  else if(sel === "ic") t += ", following Eq. 10a";
+  else if(sel === "ci") t += ", derived for continuous emission with a limited contact window";
+  t += ".\n";
+  t += "Time-averaged intake = " + fmt(F) + " x ISS" + unitI + "; time-averaged concentration = " + fmt(F) + " x CB,SS" + unitC + ".\n";
+  t += "Peak intake = " + fmt(c.iPeak) + " x ISS; peak concentration = " + fmt(c.cPeak) + " x CB,SS, reached " + fmtT(c.tPeak) + " after the cycle starts.\n\n";
+  if(sel === "ic" || sel === "ii"){
+    t += "Peak-to-baseline ratio of intake PBR = exp(kE x tN) = " + fmt(s.PBR) + (s.P0 ? ", against a tolerated PBR0 of " + fmt(s.P0) + "; intermittency of emission " + (s.PBR > s.P0 ? "cannot" : "can") + " be neglected." : ".") + "\n";
+    t += "Ratio Seq,intermittent / Seq,continuous = " + fmt(s.ratio) + ", so intermittent contact " + (s.ratio >= 0.5 ? "may" : "may not") + " be approximated as continuous at a factor-of-2 tolerance.\n";
+  }
+  if(sel === "ci") t += "Internal peak-to-baseline ratio = exp(kB x tN) = " + fmt(s.iPBR) + ".\n";
+  t += "\nAssumptions: first-order dissipation, repeated identical periodic applications at a stable periodic pattern, intake proportional to and not depleting compartment mass, and linear one-compartment toxicokinetics.\n";
+  t += "Method: Li, Wania & Arnot, modelling human exposure to chemicals from intermittent applications of consumer products using a steady-state modelling framework.\n";
+  return t;
+}
+function csv(){
+  const s = last; if(!s) return;
+  const esc = function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; };
+  const rows = [["quantity","value","unit"]];
+  rows.push(["tE", s.tE.toPrecision(6), "h"]);
+  rows.push(["tN", s.tN.toPrecision(6), "h"]);
+  rows.push(["kE", s.kE.toPrecision(6), "1/h"]);
+  rows.push(["RE", s.RE.toPrecision(6), "h"]);
+  rows.push(["kB", s.kB.toPrecision(6), "1/h"]);
+  rows.push(["delta", s.delta.toPrecision(6), "-"]);
+  rows.push(["PBR", s.PBR.toPrecision(6), "-"]);
+  rows.push(["Seq_int_over_Seq_cont", s.ratio.toPrecision(6), "-"]);
+  rows.push(["ISS", s.I === null ? "" : s.I, s.Iu]);
+  rows.push(["CB_SS", s.C === null ? "" : s.C, s.Cu]);
+  ["cc","ci","ic","ii"].forEach(function(k){
+    const c = s.cells[k], F = s.F[k];
+    rows.push([k + "_F", F.toPrecision(6), "-"]);
+    rows.push([k + "_mean_intake", s.I === null ? "" : (s.I*F).toPrecision(6), s.Iu]);
+    rows.push([k + "_peak_intake", s.I === null ? "" : (s.I*c.iPeak).toPrecision(6), s.Iu]);
+    rows.push([k + "_mean_conc", s.C === null ? "" : (s.C*F).toPrecision(6), s.Cu]);
+    rows.push([k + "_peak_conc", s.C === null ? "" : (s.C*c.cPeak).toPrecision(6), s.Cu]);
+    rows.push([k + "_time_of_peak_conc", c.tPeak.toPrecision(6), "h"]);
+  });
+  const blob = new Blob([rows.map(function(r){ return r.map(esc).join(","); }).join("\r\n")], {type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "intermittent-exposure-" + sel + ".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  flash("CSV downloaded.");
+}
+
+const RATE_OPTS = ["1/h","1/d","1/min"], TIME_OPTS = ["h","d","min"];
+function syncUnits(kindId, unitId){
+  const asRate = $(kindId).value === "k";
+  const opts = asRate ? RATE_OPTS : TIME_OPTS;
+  const keep = $(unitId).value;
+  $(unitId).innerHTML = opts.map(function(o){ return "<option>" + o + "</option>"; }).join("");
+  if(opts.indexOf(keep) >= 0) $(unitId).value = keep;
+}
+function go(){ render(compute()); }
+
+$("kt").addEventListener("change", function(){
+  const asRate = this.value === "k";
+  syncUnits("kt","ku");
+  $("kv").value = asRate ? "0.30" : "3.33";
+  $("k-hint").textContent = asRate ? "The elimination rate constant (k), typically obtained from your steady-state model." : "The residence time (R), typically obtained from your steady-state model.";
+  go();
+});
+$("bt").addEventListener("change", function(){
+  const asRate = this.value === "k";
+  syncUnits("bt","bu");
+  $("bv").value = asRate ? "0.1005" : "6.9";
+  $("b-hint").textContent = asRate ? "The total elimination rate constant (k), typically obtained from toxicokinetic modeling or measurement." : "Total or terminal elimination half-life, typically obtained from toxicokinetic modeling or measurement.";
+  go();
+});
+document.querySelectorAll(".cell").forEach(function(btn){
+  btn.addEventListener("click", function(){ sel = btn.dataset.k; go(); });
+});
+document.querySelectorAll(".chip").forEach(function(chip){
+  chip.addEventListener("click", function(){
+    const p = PRESETS[chip.dataset.p];
+    $("kt").value = "k"; syncUnits("kt","ku");
+    $("bt").value = "k"; syncUnits("bt","bu");
+    $("tE").value = p.tE; $("tEu").value = p.tEu;
+    $("tN").value = p.tN; $("tNu").value = p.tNu;
+    $("kv").value = p.kv; $("ku").value = p.ku;
+    $("bv").value = p.bv; $("bu").value = p.bu;
+    sel = p.cell;
+    go();
+  });
+});
+["tE","tEu","tN","tNu","kv","ku","bv","bu","I","Iu","C","Cu","P0"].forEach(function(id){
+  $(id).addEventListener("input", go);
+  $(id).addEventListener("change", go);
+});
+$("copy").addEventListener("click", function(){ copyText(methodsText(), "Methods summary copied."); });
+$("share").addEventListener("click", function(){ copyText(location.href, "Link copied."); });
+$("csv").addEventListener("click", csv);
+$("theme").addEventListener("click", function(){
+  const dark = document.documentElement.getAttribute("data-theme") === "dark"
+    || (!document.documentElement.hasAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  this.textContent = dark ? "Dark" : "Light";
+});
+
+readHash();
+go();
+</script>
+</body>
+</html>
